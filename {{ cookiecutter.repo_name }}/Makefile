@@ -69,7 +69,9 @@ else
 	@echo ">>> Installing virtualenvwrapper if not already installed.\nMake sure the following lines are in shell startup file\n\
 	export WORKON_HOME=$$HOME/.virtualenvs\nexport PROJECT_HOME=$$HOME/Devel\nsource /usr/local/bin/virtualenvwrapper.sh\nexport VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3\n"
 	@bash -c "source `which virtualenvwrapper.sh`;mkvirtualenv $(PROJECT_NAME) --python=$(PYTHON_INTERPRETER)"
-	@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)"
+	@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)\n>>> To automatically load virtualenv using direnv, add these functions to your ~/.config/direnv/direnvrc file:\n"
+	@cat .direnvrc
+	
 endif
 
 ## Test python environment is setup correctly

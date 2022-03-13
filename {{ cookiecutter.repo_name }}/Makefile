@@ -67,7 +67,7 @@ create_environment:
 install: create_environment
 	@echo ">>> Installing python dependencies"
 	$(PYTHON_INTERPRETER) -m poetry update --lock # ensures all dependencies are as up-to-date as possible
-	$(PYTHON_INTERPRETER) -m poetry install --no-root
+	$(PYTHON_INTERPRETER) -m poetry install
 
 ## Test python environment is setup correctly
 test_environment:

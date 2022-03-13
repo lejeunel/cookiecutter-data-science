@@ -56,23 +56,18 @@ endif
 
 ## Set up python interpreter environment
 create_environment:
-ifeq (True,$(HAS_CONDA))
-		@echo ">>> Detected conda, creating conda environment."
-ifeq (3,$(findstring 3,$(PYTHON_INTERPRETER)))
-	conda create --name $(PROJECT_NAME) python=3
-else
-	conda create --name $(PROJECT_NAME) python=2.7
-endif
-		@echo ">>> New conda env created. Activate with:\nsource activate $(PROJECT_NAME)"
-else
-	$(PYTHON_INTERPRETER) -m pip install -q virtualenv virtualenvwrapper
-	@echo ">>> Installing virtualenvwrapper if not already installed.\nMake sure the following lines are in shell startup file\n\
-	export WORKON_HOME=$$HOME/.virtualenvs\nexport PROJECT_HOME=$$HOME/Devel\nsource /usr/local/bin/virtualenvwrapper.sh\nexport VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3\n"
-	@bash -c "source `which virtualenvwrapper.sh`;mkvirtualenv $(PROJECT_NAME) --python=$(PYTHON_INTERPRETER)"
-	@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)\n>>> To automatically load virtualenv using direnv, add these functions to your ~/.config/direnv/direnvrc file:\n"
+	$(PYTHON_INTERPRETER) -m pip install -U pip
+	$(PYTHON_INTERPRETER) -m pip install -U poetry
+	$(PYTHON_INTERPRETER) -m poetry config virtualenvs.create true
+	$(PYTHON_INTERPRETER) -m poetry config virtualenvs.in-project true
+	@echo ">>> To automatically load virtualenv using direnv, add these functions to your ~/.config/direnv/direnvrc file:\n"
 	@cat .direnvrc
-	
-endif
+
+## Install Python Dependencies
+install: create_environment
+	@echo ">>> Installing python dependencies"
+	$(PYTHON_INTERPRETER) -m poetry update --lock # ensures all dependencies are as up-to-date as possible
+	$(PYTHON_INTERPRETER) -m poetry install --no-root
 
 ## Test python environment is setup correctly
 test_environment:
